@@ -53,6 +53,25 @@ echo "== [4/5] bundle"
 mkdir -p "$game/root/ms0" "$game/preload/ms0"
 python3 -I "$here/manifest.py" "$disc" "$game/root/disc.manifest"
 cp "$game/root/EBOOT.BIN" "$game/root/disc.manifest" "$game/preload/"
+if grep -q sceLibFont "$ROOT/profile/generated/$name/generated_registry.cpp" && [ ! -d "$game/root/flash0/font" ]; then
+  fonts="${PSP_FONT_DIR:-}"
+  psar="${PSP_PSAR_DECRYPT:-$ROOT/tools/pspdecrypt/pspdecrypt}"
+  updater="$disc/PSP_GAME/SYSDIR/UPDATE/DATA.BIN"
+  if [ -z "$fonts" ] && [ -x "$psar" ] && [ -f "$updater" ]; then
+    "$psar" -O "$game/firmware" "$updater" > /dev/null
+    fonts="$game/firmware/F0/font"
+  fi
+  if [ -n "$fonts" ] && [ -d "$fonts" ]; then
+    mkdir -p "$game/root/flash0/font"
+    cp "$fonts"/*.pgf "$game/root/flash0/font/"
+  else
+    echo "this game draws text with the PSP system fonts: set PSP_FONT_DIR to a flash0/font folder" >&2
+  fi
+fi
+if [ -d "$game/root/flash0/font" ]; then
+  mkdir -p "$game/preload/flash0"
+  cp -r "$game/root/flash0/font" "$game/preload/flash0/"
+fi
 
 echo "== [5/5] build"
 GEN_OPT="$opt" "$here/build_web.sh" "$name" "$game/preload" "$guest"
