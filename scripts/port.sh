@@ -48,6 +48,7 @@ echo "== [2/5] executable"
 
 echo "== [3/5] MIPS to C++"
 "$here/generate.sh" "$name" "$game/root/EBOOT.BIN"
+[ -f "$game/root/dynamic.txt" ] && "$here/dynamic.sh" "$name"
 
 echo "== [4/5] bundle"
 mkdir -p "$game/root/ms0" "$game/preload/ms0"
