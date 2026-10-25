@@ -1,0 +1,19 @@
+# docker compose up: sets the checkout up, ports each disc image in games/ and
+# serves it at http://localhost:8613/ (see scripts/compose-up.sh).
+# Any script by hand: docker compose run --rm web scripts/<script> ...
+services:
+  web:
+    build: .
+    init: true
+    user: "${UID:-1000}:${GID:-1000}"
+    volumes:
+      - .:/work
+    # The server listens on the host's loopback like serve.sh does without
+    # Docker: SharedArrayBuffer needs the page opened through localhost.
+    network_mode: host
+    environment:
+      - GAME
+      - OPTS
+      - JOBS
+      - PORT
+    command: scripts/compose-up.sh

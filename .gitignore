@@ -12,7 +12,6 @@
 /profile/generated/
 
 # Fetched or built by scripts/setup.sh and the build scripts.
-/PSPRecomp/
 /tools/
 /build/
 

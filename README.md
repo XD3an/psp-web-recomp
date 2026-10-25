@@ -26,12 +26,12 @@ No game data is included here. You bring a disc image of a game you own, and the
 
 ## Port a game of your own
 
-You need git, CMake, Ninja, a C++20 compiler and Python 3. Everything has been run on Linux; macOS should be able to build the browser version but is untested, and the native test runner needs EGL and OpenGL ES headers (`libegl-dev` and `libgles-dev` on Debian and Ubuntu). Expect about 2 GB of disk space per game for the extracted disc, the generated code and the builds.
+You need git, CMake, Ninja, a C++20 compiler, Python 3 and the zlib and OpenSSL headers (for pspdecrypt), or only Docker (see below). Everything has been run on Linux; macOS should be able to build the browser version but is untested, and the native test runner needs EGL and OpenGL ES headers (`libegl-dev` and `libgles-dev` on Debian and Ubuntu). Expect about 2 GB of disk space per game for the extracted disc, the generated code and the builds.
 
 ```bash
-git clone https://github.com/snuri00/psp-web-recomp.git
+git clone --recursive https://github.com/snuri00/psp-web-recomp.git
 cd psp-web-recomp
-scripts/setup.sh                                   # PSPRecomp, the patches and the Emscripten SDK
+scripts/setup.sh                                   # the submodules in tools/, the patches, pspdecrypt
 
 PSP_DECRYPT=/path/to/decrypter scripts/port.sh mygame "My Game.iso"
 scripts/serve.sh mygame                            # http://localhost:8613/
@@ -39,9 +39,19 @@ scripts/serve.sh mygame                            # http://localhost:8613/
 
 `port.sh` extracts the disc (an ISO, a ZIP containing one, or an already extracted folder), decrypts `PSP_GAME/SYSDIR/EBOOT.BIN`, translates it to C++, writes the manifest for streaming the rest of the disc and builds the page. It takes a few minutes; God of War goes from ZIP to playable page in about four on an 8-core laptop. Add `--native` to also build a headless runner that can dump frames to images and record audio, which is the quickest way to see how far a new game gets.
 
-Executables on retail discs are encrypted. `PSP_DECRYPT` names any tool that is called as `tool <in> <out>` and writes a plain ELF, such as DecEboot or pspdecrypt. PPSSPP can also dump a decrypted executable while it runs a game (Settings, Tools, Developer tools).
+Executables on retail discs are encrypted. `PSP_DECRYPT` names any tool that is called as `tool <in> <out>` and writes a plain ELF, such as DecEboot. `setup.sh` builds [pspdecrypt](https://github.com/John-K/pspdecrypt), a submodule in `tools/` like PSPRecomp and the Emscripten SDK, into `build/pspdecrypt`; it takes `-o <out> <in>`, and the Docker image wraps it so that it is used without any setting. PPSSPP can also dump a decrypted executable while it runs a game (Settings, Tools, Developer tools).
 
 Set your expectations accordingly: two games have been brought up so far, and both are Ready at Dawn titles built on the same engine, so they say little about how far a game from another studio gets. Another game will most likely stop at a system call nobody implemented yet, which is logged as `[hle] unimplemented ...`, or use a GE feature this renderer does not handle. [docs/internals.md](docs/internals.md) describes the tools for finding out what is missing, and the code is organized so that adding a call is a few lines.
+
+### With Docker
+
+Put a disc image of a game you own in `games/` and run
+
+```bash
+docker compose up -d --build        # progress: docker compose logs -f
+```
+
+It ports every `.iso`, `.zip` or `.7z` in `games/` (`games/My Game.iso` becomes `my_game`) and serves it at http://localhost:8613/. Settings go in front, as in `GAME=my_game JOBS=4 docker compose up -d`: `GAME` picks the game to serve when there are several, `OPTS` is passed on to `port.sh`, `JOBS` sets how many files compile at once and `PORT` the port. Any script runs with `docker compose run --rm web scripts/<script>`. The container uses the host's network, so as without Docker the page is only reachable through `localhost` (forward the port from another machine).
 
 ## Saves
 

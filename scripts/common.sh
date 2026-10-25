@@ -1,6 +1,8 @@
-# Shared paths for the build scripts.
+# Shared paths for the build scripts.  tools/ holds the submodules as fetched;
+# setup.sh prepares working copies of them in build/.
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-FRAMEWORK="$ROOT/PSPRecomp"
 BUILD="$ROOT/build"
+FRAMEWORK="$BUILD/PSPRecomp"
 TOOLS_BUILD="$BUILD/tools"
-EMSDK="$ROOT/tools/emsdk"
+PSPDECRYPT="$BUILD/pspdecrypt/pspdecrypt"
+EMSDK="$BUILD/emsdk"

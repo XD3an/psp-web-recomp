@@ -1,0 +1,9 @@
+[submodule "tools/pspdecrypt"]
+	path = tools/pspdecrypt
+	url = https://github.com/John-K/pspdecrypt.git
+[submodule "tools/PSPRecomp"]
+	path = tools/PSPRecomp
+	url = https://github.com/jessicanataliagta/PSPRecomp.git
+[submodule "tools/emsdk"]
+	path = tools/emsdk
+	url = https://github.com/emscripten-core/emsdk.git

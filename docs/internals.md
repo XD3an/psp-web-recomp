@@ -4,7 +4,7 @@ This is the part of the documentation for working on the code: where things live
 
 ## Layout
 
-`profile/` is a PSPRecomp profile, linked into the framework as `PSPRecomp/profiles/web` by `scripts/setup.sh`. Its host code is in `profile/host`:
+`profile/` is a PSPRecomp profile, linked into the framework as `build/PSPRecomp/profiles/web` by `scripts/setup.sh`. Its host code is in `profile/host`:
 
 | File | What it does |
 |---|---|
