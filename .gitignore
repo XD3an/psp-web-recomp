@@ -9,7 +9,7 @@
 *.PBP
 
 # Generated C++ is a translation of a game's code: keep it local.
-/profile/generated/
+/app/generated/
 
 # Fetched or built by scripts/setup.sh and the build scripts.
 /tools/

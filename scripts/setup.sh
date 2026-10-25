@@ -26,7 +26,7 @@ if [ ! -d "$FRAMEWORK/.git" ]; then
 fi
 
 if [ ! -e "$FRAMEWORK/profiles/web" ]; then
-  ln -s ../../../profile "$FRAMEWORK/profiles/web"
+  ln -sfn ../../../app "$FRAMEWORK/profiles/web"
   grep -qx "profiles/web" "$FRAMEWORK/.git/info/exclude" 2>/dev/null || echo "profiles/web" >> "$FRAMEWORK/.git/info/exclude"
 fi
 

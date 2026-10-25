@@ -4,7 +4,7 @@
 #
 #   1. extracts the disc to games/<name>/root/disc
 #   2. decrypts PSP_GAME/SYSDIR/EBOOT.BIN to games/<name>/root/EBOOT.BIN (see decrypt.sh)
-#   3. translates its MIPS code to C++ (profile/generated/<name>)
+#   3. translates its MIPS code to C++ (app/generated/<name>)
 #   4. writes the streaming manifest and the bundle preloaded by the page
 #   5. builds the browser version (and with --native the headless test runner)
 #
@@ -54,7 +54,7 @@ echo "== [4/5] bundle"
 mkdir -p "$game/root/ms0" "$game/preload/ms0"
 python3 -I "$here/manifest.py" "$disc" "$game/root/disc.manifest"
 cp "$game/root/EBOOT.BIN" "$game/root/disc.manifest" "$game/preload/"
-if grep -q sceLibFont "$ROOT/profile/generated/$name/generated_registry.cpp" && [ ! -d "$game/root/flash0/font" ]; then
+if grep -q sceLibFont "$ROOT/app/generated/$name/generated_registry.cpp" && [ ! -d "$game/root/flash0/font" ]; then
   fonts="${PSP_FONT_DIR:-}"
   psar="${PSP_PSAR_DECRYPT:-$ROOT/tools/pspdecrypt/pspdecrypt}"
   updater="$disc/PSP_GAME/SYSDIR/UPDATE/DATA.BIN"

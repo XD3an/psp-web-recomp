@@ -4,7 +4,7 @@ This is the part of the documentation for working on the code: where things live
 
 ## Layout
 
-`profile/` is a PSPRecomp profile, linked into the framework as `build/PSPRecomp/profiles/web` by `scripts/setup.sh`. Its host code is in `profile/host`:
+`app/` is a PSPRecomp profile, linked into the framework as `build/PSPRecomp/profiles/web` by `scripts/setup.sh`. Its host code is in `app/host`:
 
 | File | What it does |
 |---|---|
@@ -19,7 +19,7 @@ This is the part of the documentation for working on the code: where things live
 | `ge_gl.cpp` | The WebGL2 / OpenGL ES 3 backend |
 | `ge_worker.cpp` | Runs the GE on its own thread |
 
-`profile/web/shell.html` is the page: status bar, resolution menu, touch controls, fullscreen and the AudioWorklet. Generated code goes to `profile/generated/<game>` and must never be committed.
+`app/web/shell.html` is the page: status bar, resolution menu, touch controls, fullscreen and the AudioWorklet. Generated code goes to `app/generated/<game>` and must never be committed.
 
 The scripts each do one step, and `scripts/port.sh` chains them:
 
